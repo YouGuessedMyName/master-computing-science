@@ -26,8 +26,9 @@ Print example.
 (* exercise one_a *)
 Lemma one_a : (A -> B -> C) -> A -> (A -> C) -> B -> C.
 Proof.
-(*! proof *)
-
+intros.
+apply H1.
+apply H0.
 Qed.
 
 Print one_a.
@@ -35,8 +36,11 @@ Print one_a.
 (* exercise one_b *)
 Lemma one_b : ((A -> B) -> (C ->D)) -> C -> B -> D.
 Proof.
-(*! proof *)
-
+intros.
+apply H.
+intros.
+apply H1.
+apply H0.
 Qed.
 
 Print one_b.
@@ -44,8 +48,10 @@ Print one_b.
 (* exercise one_c *)
 Lemma one_c : (A -> B) -> (A -> C) -> A -> B -> C.
 Proof.
-(*! proof *)
-
+intros.
+apply H0.
+intros.
+apply H1.
 Qed.
 
 Print one_c.
@@ -65,22 +71,35 @@ Print one_c.
    NB: the converse is not true intuitionistically *)
 Lemma AnotnotA : A -> ~ ~ A .
 Proof.
-(*! proof *)
-
+intros.
+intro x.
+apply x.
+apply H.
 Qed.
 
 (* exercise two_b; see Chapter 1 of the course notes *)
 Lemma notnotnot : ~ ~ ~ A -> ~ A.
 Proof.
-(*! proof *)
-
+intros.
+intro x.
+apply H.
+apply AnotnotA.
+apply x.
 Qed.
 
 (* exercise two_c; see Chapter 1 of the course notes *)
 Lemma herman : ~ ~ (~ ~ A -> A).
 Proof.
-(*! proof *)
-
+unfold not.
+intro x.
+apply x.
+intro y.
+exfalso.
+apply y.
+intro z.
+apply x.
+intro t.
+apply z.
 Qed.
 
 Print herman.
@@ -97,14 +116,13 @@ Print herman.
    answer:   Check fun (x:A) => x. *)
 
 (* exercises: *)
-(*
 
-Check fun (x : ?) (y : ?) (z : ?) => x y z.
-Check fun (x : ?) (y : ?) (z : ?) => x (y z).
-Check fun (x : ?) (y : ?) => x y .
-Check fun (x : ?) (y : ?) (z : ?) => x z y .
+Check fun (x : A -> A -> A) (y : A) (z : A) => x y z.
+Check fun (x : B -> C) (y : A -> B) (z : A) => x (y z).
+Check fun (x : A -> A) (y : A) => x y.
+Check fun (x : A -> B -> C) (y : B) (z : A) => x z y .
 
-*)
+
 
 
 
@@ -122,44 +140,45 @@ Check fun (x : ?) (y : ?) (z : ?) => x z y .
 (* exercises *)
 
 (* four_a: (A -> B) -> (A -> C) -> A -> B -> C *)
-Definition four_a := (*! term *)
-  .
+Definition four_a := 
+  fun (ab :A -> B) (ac :A -> C) (a:A) (b:B) => ac a.
 
 Check four_a.
 
+
 (* four_b : A -> A -> A *)
 Definition four_b := (*! term *)
-  .
+  fun (x:A) (y:A) => x.
 
 Check four_b.
 
 (* four_c : A -> A -> A  but different from four_b*)
 Definition four_c := (*! term *)
-  .
+  fun (x:A) (y:A) => y.
 
 Check four_c.
 
 (* four_d : A -> B -> A *)
-Definition four_d := (*! term *)
-  .
+Definition four_d :=
+  fun (x:A) (y:B) => x.
 
 Check four_d.
 
 (* four_e : (A -> A) -> A -> A *)
 Definition four_e := (*! term *)
-  .
+  fun (aa: A->A) (x:A) => x.
 
 Check four_e.
 
 (* four_f : (A -> A) -> A -> A but different from four_e *)
-Definition four_f := (*! term *)
-  .
+Definition four_f :=
+  fun (aa: A->A) (x:A) => aa x.
 
 Check four_f.
 
 (* four_g : (A -> A -> B) -> A -> B *)
-Definition four_g := (*! term *)
-  .
+Definition four_g :=
+  fun (aab: A->A->B) (a: A) => aab a a.
 
 Check four_g.
 
