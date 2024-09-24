@@ -66,45 +66,101 @@ Qed.
 (* exercise; you need the "apply with". *)
 Lemma two : peirce -> double_negation.
 Proof.
-(*! proof *)
-
+unfold peirce.
+unfold double_negation.
+unfold not.
+intro P.
+intro x.
+intro y.
+apply P with False.
+intro z.
+exfalso.
+apply y.
+apply z.
 Qed.
 
 (* exercise *)
 Lemma three : double_negation -> excluded_middle.
 Proof.
-(*! proof *)
-
+unfold double_negation.
+unfold excluded_middle.
+unfold not.
+intro DN.
+intro x.
+apply DN.
+intro y.
+apply y.
+right.
+intro z.
+apply y.
+left.
+exact z.
 Qed.
 
 (* exercise *)
 Lemma four : excluded_middle -> double_negation.
 Proof.
-(*! proof *)
-
+unfold excluded_middle.
+unfold double_negation.
+unfold not.
+intro EM.
+intro x.
+intro y.
+destruct EM with x.
+apply H.
+exfalso.
+apply y.
+apply H.
 Qed.
 
 (* exercise *)
 Lemma everything_related :
   excluded_middle -> forall A B : Prop , (A -> B) \/ (B -> A).
 Proof.
-(*! proof *)
-
+unfold excluded_middle.
+intro EM.
+intros x y.
+destruct EM with x.
+right.
+intro z.
+apply H.
+left.
+intro t.
+exfalso.
+elim H.
+apply t.
 Qed.
 
 Lemma de_morgan :
   excluded_middle -> forall A B : Prop , ~(~A/\~B) -> A\/B.
 Proof.
-(*! proof *)
-
+unfold excluded_middle.
+intro EM.
+intros x y z.
+destruct EM with x.
+left.
+exact H.
+right.
+destruct EM with y.
+exact H0.
+exfalso.
+elim z.
+split.
+apply H.
+apply H0.
 Qed.
 
 (* exercise
    note that this lemma is true intuitionistically *)
 Lemma about_implication : forall A B : Prop , (~A \/ B) -> (A -> B).
 Proof.
-(*! proof *)
-
+intros.
+elim H.
+intro x.
+elim x.
+exact H0.
+intro y.
+exact y.
 Qed.
 
 (* exercise
@@ -112,16 +168,29 @@ Qed.
 Lemma classical_implication :
   excluded_middle -> forall A B : Prop , (A -> B) -> (~A \/ B).
 Proof.
-(*! proof *)
-
+unfold excluded_middle.
+intro EM.
+intros.
+destruct EM with A.
+right.
+apply H.
+apply H0.
+left.
+apply H0.
 Qed.
 
 (* exercise *)
 Lemma about_classical_implication :
   excluded_middle -> forall A B : Prop , ~B \/ (A ->B).
 Proof.
-(*! proof *)
-
+unfold excluded_middle.
+intros EM x y.
+destruct EM with y.
+right.
+intro z.
+exact H.
+left.
+exact H.
 Qed.
 
 
