@@ -170,7 +170,7 @@ Fixpoint mul (n m : nat) {struct n} : nat := (*! term *)
 (* complete the definition ! *)
   match n with
     | 0 => 0
-    | S p => m + (mul p m)
+    | S p => plus2 m (mul p m)
 end.
 
 

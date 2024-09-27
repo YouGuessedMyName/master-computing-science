@@ -168,8 +168,8 @@ Abort.
 (* exercise 1 *)
 Theorem even2 : (even 2 ).
 Proof.
-(*! proof *)
-
+apply evenSS.
+apply evenO.
 Qed.
 
 (* a few checks *)
@@ -184,23 +184,32 @@ Print even2.
    use inversion *)
 Theorem noteven1 : ~(even 1).
 Proof.
-(*! proof *)
-
+unfold not.
+intro H.
+inversion H.
 Qed.
 
 (* exercise 3
    you may want to use an earlier proved result *)
 Theorem even4 : even 4.
 Proof.
-(*! proof *)
-
+apply evenSS.
+apply even2.
 Qed.
 
 (* exercise 4 *)
 Theorem noteven3 : ~(even 3).
 Proof.
-(*! proof *)
-
+unfold not.
+intro x.
+apply noteven1.
+simple inversion x.
+discriminate H.
+injection H0.
+intro y.
+intro z.
+elim y.
+assumption.
 Qed.
 
 (* an inductive definition of even and odd *)
@@ -225,37 +234,49 @@ Qed.
 (* exercise 5 *)
 Theorem ev2 : ev 2.
 Proof.
-(*! proof *)
-
+exact (evS 1 odd1).
 Qed.
 
 (* exercise 6 *)
 Theorem notodd2 : ~ odd 2.
 Proof.
-(*! proof *)
-
+intro x.
+inversion x.
+inversion H0.
+inversion H2.
 Qed.
 
 (* exercise 7
    use induction *)
 Theorem evorodd : forall n:nat, ev n \/ odd n.
 Proof.
-(*! proof *)
+intro n.
+induction n.
+left.
+apply evO.
+elim IHn.
+intro x.
 
+right.
+apply oddS.
+exact x.
+
+left.
+apply evS.
+exact H.
 Qed.
 
 (* exercise 8 *)
 Theorem zero_and_zero : le O O.
 Proof.
-(*! proof *)
-
+apply le_n.
 Qed.
 
 (* exercise 9 *)
 Theorem zero_and_one  : le 0 1.
 Proof.
-(*! proof *)
-
+apply le_S.
+apply le_n.
 Qed.
 
 (* some checks *)
@@ -265,32 +286,35 @@ Check zero_and_one.
 (* exercise 10 *)
 Theorem one_and_zero : ~ (le 1 0).
 Proof.
-(*! proof *)
-
+intro x.
+inversion x.
 Qed.
 
 
 (* exercise 11 *)
 Theorem sortednil : sorted nil.
 Proof.
-(*! proof *)
-
+exact sorted0.
 Qed.
 
 
 (* exercise 12 *)
 Theorem sortedone : sorted (cons 0 nil).
 Proof.
-(*! proof *)
-
+apply sorted1.
 Qed.
 
 (* exercise 13 *)
 Theorem sorted_one_two_three :
   sorted (cons 1 (cons 2 (cons 3 nil))).
 Proof.
-(*! proof *)
-
+apply sorted2.
+apply le_S.
+apply le_n.
+apply sorted2.
+apply le_S.
+apply le_n.
+apply sorted1.
 Qed.
 
 (* exercise 14 *)
@@ -299,8 +323,11 @@ Theorem sorted_tail :
   sorted (cons n l) ->
   sorted l.
 Proof.
-(*! proof *)
-
+intros.
+destruct l.
+exact sorted0.
+inversion H.
+apply H4.
 Qed.
 
 (* given for exercise 15
@@ -321,7 +348,14 @@ Inductive without_last (n:nat) : natlist -> natlist -> Prop :=
    use three clauses: for the empty list, for a list of one
    element, for a list of two or more elements *)
 
-Inductive palindrome : natlist -> Prop := (*! term *)
-  .
+Inductive palindrome : natlist -> Prop :=
+  | palindrome_empty : palindrome nil
+  | palindrome_one : forall n:nat, palindrome (cons n nil)
+  | palindrome_two : forall l1:natlist, forall l2:natlist, forall n:nat, 
+        palindrome l2 /\ without_last n l1 l2
+      -> 
+        palindrome (cons n l1)
+.
+
 
 
