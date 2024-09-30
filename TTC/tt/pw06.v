@@ -96,8 +96,13 @@ Extraction "suc" successor.
 Theorem predecessor :
   forall n:nat, ~(n=O) -> {m:nat | S m = n}.
 Proof.
-(*! proof *)
- 
+intros.
+induction n.
+exfalso.
+elim H.
+reflexivity.
+exists n.
+reflexivity.
 Qed.
 
 (* extraction of the program *)
@@ -135,8 +140,18 @@ Theorem Mirror :
   forall t : bintree,
   {t' : bintree | Mirrored t t'}.
 Proof.
-(*! proof *)
-
+intros.
+induction t.
+exists (leaf n).
+apply Mirrored_leaf.
+elim IHt1.
+intros.
+elim IHt2.
+intros.
+exists (node x0 x).
+apply Mirrored_node.
+apply p.
+apply p0.
 Qed.
 
 Extraction Mirror.
@@ -153,8 +168,15 @@ end.
 (* ... and prove its correctness *)
 Theorem Mirrored_mirror : forall t : bintree, Mirrored t (mirror t).
 Proof.
-(*! proof *)
-
+intros.
+induction t.
+unfold mirror.
+apply Mirrored_leaf.
+apply Mirrored_node.
+fold mirror.
+apply IHt1.
+fold mirror.
+apply IHt2.
 Qed.
 
 (*  *********************************************** *)
@@ -181,14 +203,14 @@ Inductive sorted : natlist -> Prop :=
 (* week 5 exercise 11 *)
 Theorem sortednil : sorted nil.
 Proof.
-(*! proof *)
+exact sorted0.
 
 Qed.
 
 (* week 5 exercise 12 *)
 Theorem sortedone : sorted (cons 0 nil).
 Proof.
-(*! proof *)
+apply sorted1.
 
 Qed.
 
@@ -196,8 +218,13 @@ Qed.
 Theorem sorted_one_two_three :
   sorted (cons 1 (cons 2 (cons 3 nil))).
 Proof.
-(*! proof *)
-
+apply sorted2.
+right.
+reflexivity.
+apply sorted2.
+right.
+reflexivity.
+apply sorted1.
 Qed.
 
 (* week 5 exercise 14 *)
@@ -206,8 +233,13 @@ Theorem sorted_tail :
   sorted (cons n l) ->
   sorted l.
 Proof.
-(*! proof *)
-
+intros.
+induction l.
+intros.
+apply sorted0.
+intros.
+inversion H.
+apply H4.
 Qed.
 
 
@@ -223,29 +255,29 @@ Inductive Inserted (n : nat) : natlist -> natlist -> Prop :=
 (* exercise 4 *)
 Theorem exercise1_Inserted : Inserted 1 nil (cons 1 nil).
 Proof.
-(*! proof *)
+apply Inserted_front.
 
 Qed.
 
 (* exercise 5 *)
 Theorem exercise2_Inserted : Inserted 1 (cons 1 nil) (cons 1 (cons 1 nil)) .
 Proof.
-(*! proof *)
-
+apply Inserted_cons.
+apply Inserted_front.
 Qed.
 
 (* exercise 6: same theorem but give a different proof *)
 Theorem exercise3_Inserted : Inserted 1 (cons 1 nil) (cons 1 (cons 1 nil)) .
 Proof.
-(*! proof *)
-
+apply Inserted_front.
 Qed.
 
 (* exercise 7 *)
 Theorem exercise4_Inserted : ~ Inserted 1 nil (cons 2 nil).
 Proof.
-(*! proof *)
-
+unfold not.
+intro x.
+inversion x.
 Qed.
 
 Inductive Permutation : natlist -> natlist -> Prop :=
@@ -260,8 +292,12 @@ Inductive Permutation : natlist -> natlist -> Prop :=
 Lemma Permutation_neg:
   ~(Permutation (cons 1 (cons 2 nil)) (cons 2 (cons 3 nil))).
 Proof.
-(*! proof *)
-
+unfold not.
+intros.
+inversion_clear H.
+inversion_clear H1.
+inversion_clear H.
+inversion_clear H1.
 Qed.
 
 (* exercise 9 *)
@@ -276,8 +312,16 @@ Qed.
 Lemma Permutation_123:
   Permutation (cons 1 (cons 2 (cons 3 nil))) (cons 3 (cons 2 (cons 1 nil))).
 Proof.
-(*! proof *)
-
+apply Permutation_cons with (cons 3 (cons 2 nil)).
+apply Permutation_cons with (cons 3 nil).
+apply Permutation_cons with nil.
+apply Permutation_nil.
+apply Inserted_front.
+apply Inserted_cons.
+apply Inserted_front.
+apply Inserted_cons.
+apply Inserted_cons.
+apply Inserted_front.
 Qed.
 
 (* exercise 10 *)
@@ -287,8 +331,12 @@ Qed.
 Lemma Permutation_refl :
   forall (l : natlist), Permutation l l.
 Proof.
-(*! proof *)
-
+intros.
+induction l.
+apply Permutation_nil.
+apply Permutation_cons with l.
+apply IHl.
+apply Inserted_front.
 Qed.
 
 (* We use an auxiliary notion.
