@@ -357,8 +357,13 @@ Lemma Lowerbound_sorted :
   sorted l ->
   sorted (cons n l).
 Proof.
-(*! proof *)
-
+intros.
+inversion H.
+apply sorted1.
+apply sorted2.
+apply H1.
+rewrite H3.
+apply H0.
 Qed.
 
 (* In the proof of the lemma sorted_Lowerbound we will use
@@ -373,8 +378,20 @@ Lemma sorted_Lowerbound :
   forall (l : natlist) (n : nat),
   sorted (cons n l) -> Lowerbound n l.
 Proof.
-(*! proof *)
-
+intros.
+induction l.
+apply Lowerbound_nil.
+inversion H.
+apply Lowerbound_cons.
+apply H2.
+apply IHl.
+inversion H4.
+apply sorted1.
+apply sorted2.
+apply le_trans with n0.
+apply H2.
+apply H7.
+apply H8.
 Qed.
 
 (* given *)
@@ -478,6 +495,7 @@ Qed.
 
 Extraction Insert.
 
+
 (* exercise 13 *)
 (* Use induction on l.
    In the induction step, after two inversions,
@@ -486,7 +504,26 @@ Extraction Insert.
 Theorem Sort :
   forall l : natlist, {l' : natlist | Permutation l l' /\ sorted l'}.
 Proof.
-(*! proof *)
+intros.
+induction l.
+(* base case*)
+exists nil.
+split.
+apply Permutation_nil.
+apply sorted0.
+
+(* ind case *)
+inversion IHl.
+exists (cons n x).
+split.
+destruct H.
+inversion H.
+apply Permutation_refl.
+apply Permutation_cons with l.
+rewrite H3.
+apply Permutation_refl.
+inversion H2.
+rewrite H6.
 
 Qed.
 
