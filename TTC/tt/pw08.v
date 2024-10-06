@@ -6,21 +6,17 @@ Parameters A B C : Prop.
 (* exercise 1 *)
 (* complete the following simply typed lambda terms *)
 
-Definition prop1 := (*! term *)
+Definition prop1 := fun (x : A -> B -> C) (y : A -> B) (z : A) => x z (y z).
 (* fun (x : ?) (y : ?) (z : ?) => x z (y z). *)
-  .
 
-Definition prop2 := (*! term *)
+Definition prop2 := fun (x : A -> B -> C) (y : B -> A) (z : B) => x (y z) z.
 (* fun (x : ?) (y : ?) (z : ?) => x (y z) z. *)
-  .
 
-Definition prop3 := (*! term *)
+Definition prop3 := fun (x : (A -> B) -> B -> C) (y : B) => x (fun z : A => y) y.
 (* fun (x : ?) (y : ?) => x (fun z : A => y) y. *)
-  .
 
-Definition prop4 := (*! term *)
+Definition prop4 := fun (x : A -> B -> C) (y : (A -> B -> C) -> A) (z : (A -> B -> C) -> B) => x (y x) (z x).
 (* fun (x : ?) (y : ?) (z : ?) => x (y x) (z x). *)
-  .
 
 End proplogic.
 
@@ -29,13 +25,13 @@ Section deptypes.
 (* exercise 2 *)
 (* complete the following dependently typed lambda terms *)
 
-Definition pred1 := (*! term *)
+Definition pred1 := fun (l : Set -> Set) (A : Set) (B : Set) (f : l A -> l B) (x : l A) => f x.
 (* fun (l : Set -> Set) (A : ?) (B : ?) (f : l A -> l B) (x : ?) => f x. *)
-  .
 
-Definition pred2 := (*! term *)
+
+Definition pred2 := fun (e : nat -> nat -> Set) (n : nat) => forall m : nat, e n m.
 (* fun (e : nat -> nat -> ?) (n : ?) => forall m : ?, e n m. *)
-  .
+
 
 End deptypes.
 
@@ -65,8 +61,21 @@ Parameter dn: forall p:Prop, ~~p -> p.
    use dn twice, first time quite soon *)
 Lemma aux : (~ forall x:D, drinks x) -> (exists x:D, ~drinks x).
 Proof.
-(*! proof *)
-
+intro H.
+apply dn.
+unfold not.
+intros.
+elim H0.
+exists d.
+intro.
+apply H.
+intro.
+apply dn.
+unfold not.
+intros.
+elim H0.
+exists x.
+apply H2.
 Qed.
 
 
@@ -77,8 +86,17 @@ Qed.
 
 Theorem drinker : exists x:D, (drinks x) -> (forall y:D, drinks y).
 Proof.
-(*! proof *)
-
+destruct em with (forall y:D, drinks y).
+exists d.
+intro.
+apply H.
+destruct (aux H).
+intros.
+exists x.
+intros.
+exfalso.
+apply H0.
+apply H1.
 Qed.
 
 
@@ -89,8 +107,21 @@ Qed.
    using dn in the first step and then yet another time *)
 Theorem drinker2 : exists x:D, (drinks x) -> (forall y:D, drinks y).
 Proof.
-(*! proof *)
-
+apply dn.
+unfold not.
+intros.
+elim H.
+exists d.
+intros.
+apply dn.
+unfold not.
+intros.
+apply H.
+exists y.
+intros.
+exfalso.
+apply H1.
+apply H2.
 Qed.
 
 End drinker.
@@ -115,8 +146,17 @@ Theorem barber : ~ exists x : V ,
    /\
   (forall y:V, (~ shaves y y -> shaves x y)).
 Proof.
-(*! proof *)
-
+unfold not.
+intro H.
+inversion_clear H as [x A].
+destruct A as [C D].
+destruct em with (shaves x x).
+apply (C x).
+apply H.
+apply H.
+apply H.
+apply D.
+apply H.
 Qed.
 
 

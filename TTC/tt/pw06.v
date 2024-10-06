@@ -514,17 +514,18 @@ apply sorted0.
 
 (* ind case *)
 inversion IHl.
-exists (cons n x).
-split.
-destruct H.
 inversion H.
-apply Permutation_refl.
-apply Permutation_cons with l.
-rewrite H3.
-apply Permutation_refl.
-inversion H2.
-rewrite H6.
-
+elim Insert with x n.
+intros.
+exists x0.
+split.
+destruct p.
+apply Permutation_cons with x.
+apply H0.
+apply H2.
+destruct p.
+apply H3.
+apply H1.
 Qed.
 
 Extraction Sort.

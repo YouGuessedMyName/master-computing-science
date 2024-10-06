@@ -133,7 +133,7 @@ Qed.
 
 Lemma five2 : forall x:Terms, (P x -> ~ (forall y:Terms, ~(P y))).
 Proof.
-(*! proof *)
+
 
 Qed.
 
