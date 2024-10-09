@@ -133,26 +133,35 @@ Qed.
 
 Lemma five2 : forall x:Terms, (P x -> ~ (forall y:Terms, ~(P y))).
 Proof.
-(*! proof *)
-
+intros.
+unfold not.
+intro I.
+apply I with x.
+exact H.
 Qed.
 
 Lemma five3 :
   (forall x y :Terms, R x y -> ~ (R y x)) ->
   (forall x:Terms, ~ (R x x)).
 Proof.
-(*! proof *)
-
+intros.
+unfold not.
+intro I.
+apply (H x x).
+apply I.
+apply I.
 Qed.
 
 
    
 (* exercise 6 *)
 (* give inhabitants of the following two types *)
-
+(* TODO *)
+(*
 Definition six1 : 
   (forall x y:Terms, R x y -> R y x) ->
-  (forall x : Terms, R x M -> R M x) := (*! term *)
+  (forall x : Terms, R x M -> R M x) := 
+fun a => R _ M -> R M _
   .
 
 Definition six2 :
@@ -190,7 +199,7 @@ Definition seven3 := (*! term *)
   I M (H M)
 *)
   .
-
+*)
 End pred1.
 
 
@@ -205,19 +214,19 @@ Section prop2.
 (* prove the following two lemma's *)
 Lemma eight1 : forall a:Prop, a -> forall b:Prop, b -> a. 
 Proof.
-(*! proof *)
-
+intros.
+apply H.
 Qed.
 
 Lemma eight2 : (forall a:Prop, a) -> 
   forall b:Prop, forall c:Prop, ((b->c)->b)->b.
 Proof.
-(*! proof *)
-
+intros.
+apply H.
 Qed.
 
-
-
+(* TODO *)
+(*
 (* exercise 9 *)
 (* find inhabitants of the following two types *)
 Definition nine1 : forall a:Prop, (forall b:Prop, b) -> a := (*! term *)
@@ -250,7 +259,7 @@ Definition ten2 := (*! term *)
 *)
   .
  
-
+*)
 
 End prop2.
 
@@ -276,20 +285,37 @@ Fixpoint plus (n m : nat) {struct n} : nat :=
 (* prove the following three lemma's *)
 Lemma plus_n_O : forall n : nat, n = plus n 0.
 Proof.
-(*! proof *)
-
+intro.
+induction n.
+reflexivity.
+simpl.
+rewrite IHn.
+auto.
 Qed.
 
 Lemma plus_n_S : forall n m : nat, S (plus n m) = plus n (S m).
 Proof.
-(*! proof *)
+intros.
+induction n.
+auto.
 
+simpl.
+rewrite IHn.
+reflexivity.
 Qed.
 
 Lemma com : forall n m : nat, plus n m = plus m n.
 Proof.
-(*! proof *)
+intros.
+induction n.
+induction m.
+reflexivity.
 
+apply plus_n_O.
+
+simpl.
+rewrite IHn.
+apply plus_n_S.
 Qed.
 
 
@@ -305,8 +331,10 @@ Inductive polybintree (X : Set) : Set :=
 (* give a definition counttree that counts the number of leafs *)
 
 Fixpoint counttree (X : Set) (b : polybintree X) {struct b} : nat :=
-    (*! term *)
-  .
+match b with
+  | polyleaf _ e => 0
+  | polynode _ l r => S (plus (counttree X l) (counttree X r))
+end.
 
 
 
@@ -315,7 +343,10 @@ Fixpoint counttree (X : Set) (b : polybintree X) {struct b} : nat :=
    for a tree with natural numbers on the leafs *)
 
 Fixpoint sum (b:polybintree nat) {struct b} : nat := (*! term *)
-  .
+match b with
+  | polyleaf _ e => e
+  | polynode _ l r => (plus (sum l) (sum r))
+end.
 
 
 (* given *)
@@ -337,7 +368,10 @@ Definition andb (b1 b2:bool) : bool := ifb b1 b2 false.
    use andb for conjunction on booleans *)
 
 Fixpoint conjunction (t : polybintree bool) {struct t} : bool := (*! term *)
-  .
+match t with
+  | polyleaf _ e => e
+  | polynode _ l r => andb (conjunction l) (conjunction r)
+end.
 
 
 
