@@ -11,68 +11,53 @@ Parameters A B C : Prop.
 (* also use Print to see the proof-term *)
 Lemma one1 : ((A -> B -> A) -> A) -> A.
 Proof.
-intros.
-apply H.
-intros.
-apply H0.
-Qed.
+(*! proof *)
 
-Print one1.
+Qed.
 
 Lemma one2 : (A -> B -> C) -> (A -> B) -> A -> C.
 Proof.
-intros.
-apply H.
-apply H1.
-apply H0.
-apply H1.
-Qed.
+(*! proof *)
 
-Print one2.
+Qed.
 
 Lemma one3 : (B -> (A -> B) -> C) -> B -> C.
 Proof.
-intros.
-apply H.
-apply H0.
-intro.
-apply H0.
+(*! proof *)
+
 Qed.
 
-Print one3.
+
 
 (* exercise 2 *)
 (* give of each of the following three types an inhabitant *)
-Definition two1 : (A -> A -> B) -> (C -> A) -> C -> B :=
-  fun (x: (A -> A -> B)) (y: (C -> A)) (z: C) =>
-x (y z) (y z).
+Definition two1 : (A -> A -> B) -> (C -> A) -> C -> B := (*! term *)
+  .
 
-Definition two2 : (A -> A -> B) -> A -> B :=
-  fun (x : (A -> A -> B)) (y : A) =>
-x y y.
+Definition two2 : (A -> A -> B) -> A -> B := (*! term *)
+  .
 
 Definition two3 : (A -> B -> C) -> B -> A -> C := (*! term *)
-  fun (x: (A -> B -> C)) (y: B) (z: A) =>
-x z y.
+  .
 
 
 
 (* exercise 3 *)
 (* complete the following four simply typed lambda terms *)
-Definition three1 :=
-fun (x : (A -> B -> C)) (y : (A -> B)) (z : A) => x z (y z)
+Definition three1 := (*! term *)
+(* fun (x : ?) (y : ?) (z : ?) => x z (y z) *)
   .
 
-Definition three2 := 
-fun (x : A -> B -> C) (y : (B -> A)) (z : B) => x (y z) z
+Definition three2 := (*! term *)
+(* fun (x : ?) (y : ?) (z : ?) => x (y z) z *)
   .
 
-Definition three3 := 
-fun (x : (B->B) -> B -> C) (y : B) => x (fun z : B => y) y
+Definition three3 := (*! term *)
+(* fun (x : ?) (y : ?) => x (fun z : ? => y) y *)
   .
 
-Definition three4 := 
-fun (x : A -> B -> C) (y : (A -> B -> C) -> A) (z : (A -> B -> C) -> B) => x (y x) (z x)
+Definition three4 := (*! term *)
+(* fun (x : ?) (y : ?) (z : ?) => x (y x) (z x) *)
   .
 
 
@@ -81,23 +66,14 @@ fun (x : A -> B -> C) (y : (A -> B -> C) -> A) (z : (A -> B -> C) -> B) => x (y 
 (* prove the following two lemma's *)
 Lemma four1 : (~A \/ B) -> (A -> B).
 Proof.
-intro H.
-intro I.
-elim H.
-intro J.
-elim J.
-exact I.
-trivial.
+(*! proof *)
+
 Qed.
 
 Lemma four2 : (A \/ ~ A) -> ~~A -> A.
 Proof.
-intros H I.
-elim H.
-trivial.
-intro J.
-elim I.
-exact J.
+(*! proof *)
+
 Qed.
 
 
@@ -123,52 +99,39 @@ Parameters R : Terms -> Terms -> Prop.
 (* see practical work 7 *)
 Lemma five1 : (forall x:Terms, ~ (P x)) -> ~ (exists x:Terms, P x).
 Proof.
-intros.
-unfold not.
-intro I.
-elim I.
-apply H.
+(*! proof *)
+
 Qed.
 
 Lemma five2 : forall x:Terms, (P x -> ~ (forall y:Terms, ~(P y))).
 Proof.
-intros.
-unfold not.
-intro I.
-apply I with x.
-exact H.
+(*! proof *)
+
 Qed.
 
 Lemma five3 :
   (forall x y :Terms, R x y -> ~ (R y x)) ->
   (forall x:Terms, ~ (R x x)).
 Proof.
-intros.
-unfold not.
-intro I.
-apply (H x x).
-apply I.
-apply I.
+(*! proof *)
+
 Qed.
 
 
    
 (* exercise 6 *)
 (* give inhabitants of the following two types *)
-(* TODO *)
 
 Definition six1 : 
   (forall x y:Terms, R x y -> R y x) ->
-  (forall x : Terms, R x M -> R M x) := 
-fun one => (fun a b => one b a) M
+  (forall x : Terms, R x M -> R M x) := (*! term *)
   .
 
 Definition six2 :
   (forall x y z : Terms, R x y -> R y z -> R x z) ->
   R M N ->
   R N M ->
-  R M M :=
-fun func => func M N M
+  R M M := (*! term *)
   .
 
 
@@ -176,23 +139,30 @@ fun func => func M N M
 (* exercise 7 *)
 (* complete the following two lambda-terms *)
 
-Definition seven1 := 
+Definition seven1 := (*! term *)
+(*
   fun (H : forall x:Terms, P x -> Q x) =>
-  fun (I : P M) =>
+  fun (I : ?) =>
   H M I
+*)
   .
 
-Definition seven2 :=
+Definition seven2 := (*! term *)
+(*
   fun (H : forall x y : Terms, R x y -> R y x) =>
-  fun (I : R M N) =>
+  fun (I : ?) =>
   H M N I
+*)
   .
 
-Definition seven3 :=
-  fun (H : (forall y : Terms, P y)) =>
+Definition seven3 := (*! term *)
+(*
+  fun (H : ?) =>
   fun (I : forall x, P x -> Q x) =>
   I M (H M)
+*)
   .
+
 End pred1.
 
 
@@ -207,44 +177,52 @@ Section prop2.
 (* prove the following two lemma's *)
 Lemma eight1 : forall a:Prop, a -> forall b:Prop, b -> a. 
 Proof.
-intros.
-apply H.
+(*! proof *)
+
 Qed.
 
 Lemma eight2 : (forall a:Prop, a) -> 
   forall b:Prop, forall c:Prop, ((b->c)->b)->b.
 Proof.
-intros.
-apply H.
+(*! proof *)
+
 Qed.
+
+
 
 (* exercise 9 *)
 (* find inhabitants of the following two types *)
-Definition nine1 : forall a:Prop, (forall b:Prop, b) -> a := 
-  fun a taut => taut a.
-
-Definition nine2 : forall a:Prop, a -> (forall b:Prop, ((a -> b) -> b)) :=
-    fun ap a bp a_to_b => a_to_b a 
+Definition nine1 : forall a:Prop, (forall b:Prop, b) -> a := (*! term *)
   .
 
-Check nine2.
+Definition nine2 : forall a:Prop, a -> (forall b:Prop, ((a -> b) -> b)) :=
+    (*! term *)
+  .
+
+
 
 (* exercise 10 *)
 (* complete the following lambda terms *)
 
-Definition ten1 :=
-  fun (a:Prop) =>
+Definition ten1 := (*! term *)
+(*
+  fun (a:?) =>
   fun (x: forall b:Prop, b) =>
   x a
+*)
   .
 
-Definition ten2 :=
-  fun (a:Prop) =>
+Definition ten2 := (*! term *)
+(*
+  fun (a:?) =>
   fun (x:a) =>
-  fun (b:Prop) =>
+  fun (b:?) =>
   fun (y:b) =>
   x
-.
+*)
+  .
+ 
+
 
 End prop2.
 
@@ -270,37 +248,20 @@ Fixpoint plus (n m : nat) {struct n} : nat :=
 (* prove the following three lemma's *)
 Lemma plus_n_O : forall n : nat, n = plus n 0.
 Proof.
-intro.
-induction n.
-reflexivity.
-simpl.
-rewrite IHn.
-auto.
+(*! proof *)
+
 Qed.
 
 Lemma plus_n_S : forall n m : nat, S (plus n m) = plus n (S m).
 Proof.
-intros.
-induction n.
-auto.
+(*! proof *)
 
-simpl.
-rewrite IHn.
-reflexivity.
 Qed.
 
 Lemma com : forall n m : nat, plus n m = plus m n.
 Proof.
-intros.
-induction n.
-induction m.
-reflexivity.
+(*! proof *)
 
-apply plus_n_O.
-
-simpl.
-rewrite IHn.
-apply plus_n_S.
 Qed.
 
 
@@ -316,10 +277,8 @@ Inductive polybintree (X : Set) : Set :=
 (* give a definition counttree that counts the number of leafs *)
 
 Fixpoint counttree (X : Set) (b : polybintree X) {struct b} : nat :=
-match b with
-  | polyleaf _ e => 0
-  | polynode _ l r => S (plus (counttree X l) (counttree X r))
-end.
+    (*! term *)
+  .
 
 
 
@@ -328,10 +287,7 @@ end.
    for a tree with natural numbers on the leafs *)
 
 Fixpoint sum (b:polybintree nat) {struct b} : nat := (*! term *)
-match b with
-  | polyleaf _ e => e
-  | polynode _ l r => (plus (sum l) (sum r))
-end.
+  .
 
 
 (* given *)
@@ -353,10 +309,7 @@ Definition andb (b1 b2:bool) : bool := ifb b1 b2 false.
    use andb for conjunction on booleans *)
 
 Fixpoint conjunction (t : polybintree bool) {struct t} : bool := (*! term *)
-match t with
-  | polyleaf _ e => e
-  | polynode _ l r => andb (conjunction l) (conjunction r)
-end.
+  .
 
 
 

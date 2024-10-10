@@ -59,21 +59,13 @@ intro b.
 Abort.
 *)
 
+
 (* exercise 1 *)
 (* give inhabitants of the following types: *)
 (* forall a : Prop, a -> a *)
-Definition exercise1a (a : Prop) : a -> a :=
-  fun a : a => a.
-Check exercise1a.
 (* forall a b : Prop, (a -> b) -> a -> b *)
-Definition exercise1b (a b : Prop) : (a -> b) -> a -> b :=
-  fun (f : (a -> b)) (a : a) => f a.
-Check exercise1b.
-(* forall a : Prop, a -> forall b : Prop, (a -> b) ->  b *)
-(* forall a : Prop, forall _: a, forall b : Prop, forall _ : (a -> b), b*)
-Definition exercise1c : forall a : Prop, a -> forall b : Prop, (a -> b) ->  b :=
-  fun _ a _ a_to_b => a_to_b a.
-Check exercise1c.
+(* forall a : Prop, a -> forall b : Prop, (a -> b) ->  b*)
+
 
 
 (* exercises with negation *)
@@ -81,42 +73,20 @@ Check exercise1c.
 (* exercise 2 *)
 Lemma exercise2 : forall a:Prop, a -> ~~a.
 Proof.
-intro a.
-intro H.
-unfold not.
-intro I.
-apply (I H).
+(*! proof *)
+
 Qed.
 
 Lemma exercise3: forall a:Prop, ~~~a -> ~a.
 Proof.
-intros a H.
-unfold not.
-intro I.
-apply H.
-apply exercise2.
-apply I.
+(*! proof *)
+
 Qed.
 
 Lemma exercise4: forall a:Prop, ~~(~~a -> a).
 Proof.
-intro a.
-intro H.
-elim exercise2 with (~a).
-unfold not.
-intro I.
-apply H.
-intro J.
-apply I.
+(*! proof *)
 
-unfold not.
-intro I.
-apply H.
-intro J.
-exfalso.
-elim J.
-unfold not.
-apply I.
 Qed.
 
 
@@ -124,18 +94,14 @@ Qed.
 
 Lemma exercise5 : forall a:Prop, (exists b:Prop, a) -> a.
 Proof.
-intro a.
-intro H.
-destruct H.
-apply H.
+(*! proof *)
+
 Qed.
 
 Lemma exercise6 : forall a:Prop, exists b:Prop, ((a -> b) \/ (b -> a)).
 Proof.
-intro a.
-exists a.
-left.
-trivial.
+(*! proof *)
+
 Qed.
 
 
@@ -146,16 +112,8 @@ Definition em:= forall a:Prop, a \/ ~a.
 
 Lemma exercise7: em -> forall a b:Prop, ((a -> b) \/ (b -> a)).
 Proof.
-intro EM.
-intro a.
-intro b.
-destruct EM with a.
-right.
-trivial.
-left.
-intro I.
-elim H.
-apply I.
+(*! proof *)
+
 Qed.
 
 (* expressibility of prop2 *)
@@ -167,24 +125,22 @@ Definition new_false := forall a:Prop, a.
 (* False implies new_false *)
 Lemma exercise8 : False -> new_false.
 Proof.
-intro false.
-exfalso.
-apply false.
+(*! proof *)
+
 Qed.
 
 (* new_false implies False *)
 Lemma exercise9 : new_false -> False.
 Proof.
-unfold new_false.
-intro nf.
-apply nf.
+(*! proof *)
+
 Qed.
 
 (* from new_false we can prove anything *)
 Lemma exercise10 : forall a:Prop, new_false -> a.
 Proof.
-intros a nf.
-apply nf.
+(*! proof *)
+
 Qed.
 
 

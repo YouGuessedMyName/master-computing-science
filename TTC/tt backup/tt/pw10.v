@@ -102,8 +102,8 @@ Eval compute in (natlength (natcons 2 (natcons 1 (natcons 0 natnil)))).
 (* length of polymorphic lists *)
 Fixpoint polylength (A:Set)(l:(polylist A)){struct l} : nat :=
   match l with
-    polynil _ => O
-  | polycons _ h t => S (polylength A t)
+    polynil => O
+  | polycons h t => S (polylength A t)
   end.
 
 (* NB: in the recursive definition,
@@ -145,26 +145,19 @@ Check polylistb_ind.
 (* test it using Eval compute on an example *)
 
 Fixpoint polyappend (X:Set) (k l : polylist X) {struct k} : (polylist X) :=
-match k with
-    | ni => l
-    | co e k' => co e (polyappend _ k' l)
-end.
+    (*! term *)
+  .
 
-Eval compute in polyappend _
-((co 1 (co 2 (co 3 ni))))
-((co 4 (co 5 (co 6 ni)))).
+Eval compute in (*! term *)
+  .
 
 (* prove the following lemma, to be used later*)
 Lemma append_nil :
   forall X:Set, forall l: polylist X,
   polyappend X l (polynil X) = l.
 Proof.
-intros.
-induction l.
-reflexivity.
-simpl.
-rewrite IHl.
-reflexivity.
+(*! proof *)
+
 Qed.
 
 
@@ -173,14 +166,8 @@ Qed.
 Lemma append_assoc : forall X, forall k l m,
   (polyappend X (polyappend X k l) m) = (polyappend X k (polyappend X l m)).
 Proof.
-intros.
-induction k.
-simpl.
-reflexivity.
-(* 😍️ 😘️😷️*)
-simpl.
-rewrite IHk.
-reflexivity.
+(*! proof *)
+
 Qed.
 
 
@@ -190,14 +177,8 @@ Lemma length_append :
  forall X:Set, forall k l : (polylist X),
   polylength X (polyappend X k l) = plus (polylength X k) (polylength X l).
 Proof.
-intros.
-induction k.
-simpl.
-reflexivity.
+(*! proof *)
 
-simpl.
-rewrite IHk.
-reflexivity.
 Qed.
 
 
@@ -206,13 +187,8 @@ Qed.
 (* test it using Eval compute on an example *)
 
 Fixpoint polyreverse (X:Set) (l : polylist X) {struct l} :(polylist X) :=
-match l with
-  | ni      => ni
-  | co e l' => (polyappend _ (polyreverse _ l') (co e ni))
-end.
-(* | co e l' => (polyappend _ (polyreverse _ l') (co e ni)) *)
-Eval compute in polyreverse _
-((co 1 (co 2 (co 3 ni)))).
+    (*! term *)
+  .
 
 
 (* exercise 6 *)
@@ -222,15 +198,8 @@ Lemma reverse_append :
   polyreverse X (polyappend X k l) =
   polyappend X (polyreverse X l) (polyreverse X k).
 Proof.
-intros.
-induction k.
-rewrite append_nil.
-simpl.
-auto.
+(*! proof *)
 
-simpl.
-rewrite IHk.
-apply append_assoc.
 Qed.
 
 
@@ -242,8 +211,8 @@ Lemma rev_cons_app :
   polyappend X (polyreverse X (polycons X x k)) l =
   polyappend X (polyreverse X k) (polycons X x l).
 Proof.
-intros.
-apply append_assoc.
+(*! proof *)
+
 Qed.
 
 
@@ -281,21 +250,17 @@ Eval compute in (natprodsecond (natpair 1 2)).
    where the first element comes from a set X
    and the second element comes from a set Y    *)
 
-Inductive prod (X Y :Set) : Set :=
-  | pair : X -> Y -> prod X Y.
+Inductive prod (X Y :Set) : Set := (*! term *)
+  .
 
 (* exercise 9 *)
 (* give definitions of the first and second projection *)
 
-Definition fst (X Y : Set) (p: prod X Y) : X :=
-match p with
-| pair _ _ x y => x
-end.
+Definition fst (X Y : Set) (p: prod X Y) : X := (*! term *)
+  .
 
-Definition snd (X Y : Set) (p : prod X Y) : Y :=
-match p with
-| pair _ _ x y => y
-end.
+Definition snd (X Y : Set) (p : prod X Y) : Y := (*! term *)
+  .
 
 
 (*        exercises about polymorphic trees       *)
@@ -324,28 +289,25 @@ Check (natnode 2 (natnode 1 natleaf natleaf) (natnode 3 natleaf natleaf)).
    with labels on the nodes
    you may introduce handy notation *)
 
-Inductive polybintree (X : Set) : Set :=
-    polyleaf : polybintree _
-  | polynode : X -> polybintree X -> polybintree X -> polybintree X.
+Inductive polybintree (X : Set) : Set := (*! term *)
+  .
 
-Eval compute in polyappend _
-((co 1 (co 2 (co 3 ni))))
-((co 4 (co 5 (co 6 ni)))).
+
 
 (* exercise 11 *)
 (* complete the definition of polyflatten
    polyflatten puts the labels of a polybintree from left to right in a polylist *)
 
 Fixpoint polyflatten (X:Set) (t:polybintree X) {struct t} : (polylist X) :=
+  (*! term *)
+(*
 match t with
-| polyleaf _ => ni
-| polynode _ x l r => co x (polyappend _ (polyflatten _ l) (polyflatten _ r))
-end.
+| polyleaf =>
+| polynode x l r =>
+end
+*)
+  .
 
-Eval compute in polyflatten _
-(polyleaf _).
-Eval compute in polyflatten _
-(polynode _ 1 (polyleaf _) (polyleaf _)).
-Eval compute in polyflatten _
-(polynode _ 2 (polynode _ 1 (polyleaf _) (polyleaf _)) (polynode _ 3 (polyleaf _) (polyleaf _))).
+(* perform some tests using the trees above *)
+
 

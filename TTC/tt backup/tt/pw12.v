@@ -63,75 +63,41 @@ Eval compute in (polyid nat O).
 (* give inhabitants of the following types *)
 
 (* forall a : Prop, a -> a *)
-Definition exercise1a : forall a : Prop, a -> a := 
-fun ap a => a
-.
 (* forall a b : Prop, (a -> b) -> a -> b *)
-Definition exercise1b : forall a b : Prop, (a -> b) -> a -> b :=
-fun ap bp a_to_b a => a_to_b a.
 (* forall a : Prop, a -> forall b : Prop, (a -> b) ->  b*)
-Definition exercise1c : forall a : Prop, a -> forall b : Prop, (a -> b) ->  b :=
-fun ap a bp a_to_b => a_to_b a.
+
 (* exercises with negation *)
+
 Lemma exercise2 : forall a:Prop, a -> ~~a.
 Proof.
-intro a.
-intro H.
-unfold not.
-intros.
-apply H0.
-exact H.
+(*! proof *)
+
 Qed.
 
 Lemma exercise3: forall a:Prop, ~~~a -> ~a.
 Proof.
-intro a.
-intro x.
-unfold not.
-intro y.
-elim x.
-apply exercise2.
-exact y.
+(*! proof *)
+
 Qed.
 
 Lemma exercise4: forall a:Prop, ~~(~~a -> a).
 Proof.
-intro a.
-unfold not.
-intros.
-elim exercise2 with (~a).
-unfold not.
-intro.
-apply H.
-intros.
-apply H0.
+(*! proof *)
 
-unfold not.
-intro I.
-apply H.
-intro J.
-elim J.
-exact I.
 Qed.
 
 (* exercises with full intuitionistic prop2 *)
 
 Lemma exercise5 : forall a:Prop, (exists b:Prop, a) -> a.
 Proof.
-intro a.
-intro H.
-elim H.
-intros.
-apply H0.
+(*! proof *)
+
 Qed.
 
 Lemma exercise6 : forall a:Prop, exists b:Prop, ((a -> b) \/ (b -> a)).
 Proof.
-intro a.
-exists a.
-left.
-intro H.
-apply H.
+(*! proof *)
+
 Qed.
 
 (* exercise with classical prop2 *)
@@ -140,19 +106,8 @@ Definition em:= forall a:Prop, a \/ ~a.
 
 Lemma exercise7 : em -> forall a b:Prop, ((a -> b) \/ (b -> a)).
 Proof.
-intro EM.
-intros a b.
-elim EM with a.
-intro H.
-right.
-intro I.
-apply H.
+(*! proof *)
 
-intro H.
-left.
-intro I.
-elim H.
-exact I.
 Qed.
 
 (* expressibility of prop2 *)
@@ -164,24 +119,22 @@ Definition new_false := forall a:Prop, a.
 (* False implies new_false *)
 Lemma exercise8 : False -> new_false.
 Proof.
-intro false.
-elim false.
+(*! proof *)
+
 Qed.
 
 (* new_false implies False *)
 Lemma exercise9 : new_false -> False.
 Proof.
-unfold new_false.
-intro nf.
-apply nf.
+(*! proof *)
+
 Qed.
 
 (* from new_false we can prove anything *)
 Lemma exercise10 : forall a:Prop, new_false -> a.
 Proof.
-intro a.
-intro nf.
-apply nf.
+(*! proof *)
+
 Qed.
 
 (*  definition of and *)
@@ -192,15 +145,8 @@ Definition new_and (a b : Prop) := forall c : Prop, (a -> b -> c) -> c.
 (* and implies new_and *)
 Lemma exercise11 : forall a b : Prop,a /\ b -> new_and a b.
 Proof.
-intros a b.
-intro a_and_b.
-unfold new_and.
-intro c.
-intro a_to_b_to_c.
-destruct a_and_b.
-apply a_to_b_to_c.
-apply H.
-apply H0.
+(*! proof *)
+
 Qed.
 
 
@@ -208,14 +154,8 @@ Qed.
 Lemma exercise12 : forall a b : Prop ,
                    new_and a b -> a /\ b.
 Proof.
-unfold new_and.
-intros a b.
-intro H.
-apply H.
-intros I J.
-split.
-trivial.
-trivial.
+(*! proof *)
+
 Qed.
 
 (* exercise 13 *)
@@ -230,41 +170,22 @@ Definition new_or (a b : Prop) := forall c : Prop, (a -> c) -> (b -> c) -> c.
 
 Lemma exercise14 : forall a b , a \/ b -> new_or a b.
 Proof.
-intros a b.
-intro H.
-unfold new_or.
-intro c.
-elim H.
-intros I J K.
-apply J.
-trivial.
-intros I J K.
-apply K.
-trivial.
+(*! proof *)
+
 Qed.
 
 Lemma exercise15 : forall a b , new_or a b -> a \/ b.
 Proof.
-unfold new_or.
-intros a b.
-intro H.
-apply H.
-intro I.
-left.
-trivial.
-intro I.
-right.
-trivial.
+(*! proof *)
+
 Qed.
 
 (* exercise 16 *)
 (* given an inhabitant Q:A *)
 (* give an inhabitant of new_or A B with A and B in Prop *)
 Parameter Q:A.
-Definition inh : (forall c : Prop, (A -> c) -> (B -> c) -> c) :=
-fun c A_to_c B_to_c => A_to_c Q
-.
-Check inh
+
+Check (*! term *)
   .
 
 
