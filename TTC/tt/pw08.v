@@ -165,11 +165,22 @@ Qed.
    prove the more elegant formulation of the barber's paradox
    with the forall inside the /\ *)
 
-Theorem barber2 : (*! term *)
-  .
+Theorem barber2 : ~ exists x : V , forall y:V,
+  (shaves x y -> ~ shaves y y)
+   /\
+  (~ shaves y y -> shaves x y).
 Proof.
-(*! proof *)
-
+unfold not.
+intro H.
+inversion_clear H as [x A].
+destruct A with x.
+destruct em with (shaves x x).
+elim H.
+apply H1.
+apply H1.
+elim H1.
+apply H0.
+apply H1.
 Qed.
 
 End barber.

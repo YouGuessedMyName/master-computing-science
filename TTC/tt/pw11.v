@@ -155,7 +155,6 @@ Qed.
    
 (* exercise 6 *)
 (* give inhabitants of the following two types *)
-(* TODO *)
 
 Definition six1 : 
   (forall x y:Terms, R x y -> R y x) ->
