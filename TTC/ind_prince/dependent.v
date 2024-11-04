@@ -19,6 +19,13 @@ Inductive le (n : nat) : nat -> Prop :=
 le_n : le n n
 | le_S : forall m : nat, le n m -> le n (S m).
 
+Check le_ind.
+
+Inductive and (A B : Set) : Set :=
+conj : A -> B -> and A B.
+
+Check and_ind.
+
 Check (le_S 2 3 (
 le_S 2 2 (
 le_n 2))).

@@ -11,6 +11,6 @@ end.
 Definition pred2 (n : nat) :=
 nat_ind nat
 O
-(fun m p => p) n.
+(fun m p => m) n.
 
-Eval compute in (pred2 (S (S (S S (O)))).
+Eval compute in (pred2 (S (S (S (S O))))).
