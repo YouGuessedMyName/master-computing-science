@@ -1,0 +1,14 @@
+use StdIO: all;
+use Array: all;
+
+double[n] recip (double[n] x) | all (x != 0.0)
+{
+ return 1.0/x;
+}
+
+
+
+int main () {
+    print(reshape([5], [1,2,3,4,5]));
+    return 0;
+}
