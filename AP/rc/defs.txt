@@ -1,0 +1,19 @@
+ALLOC INT (<size>, <id>) for allocating <size> many integer elements and initialising 
+    them with 0s and allocating a reference counter with an initial value of 1.
+
+COPY DATA (<size>, <from-id>, <to-id>) for copying <size> many integer elements 
+    from the memory pointed to by <from-id> to the memory pointed to by <to-id>.
+
+INC RC (<id>, <num>) for incrementing the reference counter of the array <id> by
+    the value <num>.
+
+DEC RC (<id>, <num>) for decrementing the reference counter of the array <id> by
+    the value <num> and potentially freeing the memory in case the reference counter
+    reaches 0.
+
+RC (<id>) for reading the reference counter of the array <id>
+
+SIZE (<id>) for obtaining the size of the array <id> (in elements)
+    You can use <id>[<num>] for denoting data selections in C and <id>[<num>] =
+    <expr>; for denoting destructive updates in C. 
+    You can omit all variable declarations
